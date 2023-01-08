@@ -39,10 +39,41 @@ func GetAllIncidents(w http.ResponseWriter, r *http.Request) {
 		township := cases.Title(language.AmericanEnglish).String(strings.TrimSpace(splitStr[0]))
 		intersection := cases.Title(language.AmericanEnglish).String(strings.TrimSpace(splitStr[1]))
 		units := cases.Title(language.AmericanEnglish).String(strings.TrimSpace(splitStr[2]))
-		unitArr := strings.Split(units, "<br>")
-
-		incidents = append(incidents, models.Incident{Title: item.Title, Township: township, Intersection: intersection, Units: unitArr, PubDateUtc: time})
+		unitArr := strings.Split(units, "<Br>")
+		for i := range unitArr {
+			unitArr[i] = strings.TrimSpace(unitArr[i])
+		}
+		inc := models.Incident{Title: item.Title, Township: township, Intersection: intersection, Units: unitArr, PubDateUtc: time}
+		inc.Type = getIncidentType(inc)
+		incidents = append(incidents, inc)
 	}
 
 	json.NewEncoder(w).Encode(incidents)
+}
+
+func getIncidentType(i models.Incident) string {
+	for _, unit := range i.Units {
+		for _, hint := range models.FireUnitHints {
+			if strings.Contains(strings.ToLower(unit), strings.ToLower(hint)) {
+				return "fire"
+			}
+		}
+		for _, hint := range models.MedicalUnitHints {
+			if strings.Contains(strings.ToLower(unit), strings.ToLower(hint)) {
+				return "medical"
+			}
+		}
+		for _, hint := range models.TrafficUnitHints {
+			if strings.Contains(strings.ToLower(unit), strings.ToLower(hint)) {
+				return "traffic"
+			}
+		}
+	}
+	for _, hint := range models.FireTitleHints {
+		if strings.Contains(strings.ToLower(i.Title), strings.ToLower(hint)) {
+			return "fire"
+		}
+	}
+	// don't know based off of data, default to traffic
+	return "traffic"
 }
