@@ -33,6 +33,6 @@ compile:
 deploy:
   stage: deploy
   script: 
-    - scp mybinaries /var/www/html/incident_api
+    - scp -r mybinaries /var/www/html/incident_api
   environment: production
 
