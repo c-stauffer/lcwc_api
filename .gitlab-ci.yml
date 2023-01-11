@@ -29,3 +29,10 @@ compile:
   artifacts:
     paths:
       - mybinaries
+  
+deploy:
+  stage: deploy
+  script: 
+    - scp mybinaries /var/www/html/incident_api
+  environment: production
+
