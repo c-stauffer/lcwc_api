@@ -60,17 +60,17 @@ func GetAllIncidents(w http.ResponseWriter, r *http.Request) {
 			unitsEle := -1
 			unitRegexp, rErr := regexp.Compile(`.+[0-9]+-[0-9+].*`)
 			for i := range splitStr {
-				if (strContains(splitStr[1], "&") || strContains(splitStr[1], "/")) && intersectionEle == -1 {
+				if (strContains(splitStr[i], "&") || strContains(splitStr[i], "/")) && intersectionEle == -1 {
 					intersectionEle = i
 					continue
 				}
-				if strContains(splitStr[1], "county") && townshipEle == -1 {
+				if strContains(splitStr[i], "county") && townshipEle == -1 {
 					townshipEle = i
 					continue
 				}
 
 				if unitsEle == -1 {
-					if strContains(splitStr[1], "<br>") || strContains(splitStr[i], "pending") {
+					if strContains(splitStr[i], "<br>") || strContains(splitStr[i], "pending") {
 						unitsEle = i
 						continue
 					}
