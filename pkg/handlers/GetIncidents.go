@@ -43,6 +43,9 @@ func GetAllIncidents(w http.ResponseWriter, r *http.Request) {
 		var intersection string
 		var units string
 		var unitArr []string
+		if len(splitStr) > 0 && strings.TrimSpace(splitStr[len(splitStr)-1]) == "" {
+			splitStr = splitStr[:len(splitStr)-1]
+		}
 
 		if len(splitStr) == 3 {
 			// simple case where all values have been supplied in rss
