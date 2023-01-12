@@ -33,8 +33,8 @@ compile:
 deploy:
   stage: deploy
   script: 
-    - service nginx stop
+    #- service nginx stop
     - scp -r mybinaries /var/www/html/incident_api
-    - service nginx start
+    #- service nginx start
   environment: production
 
