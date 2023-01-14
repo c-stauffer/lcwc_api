@@ -30,6 +30,7 @@ func GetAllIncidents(w http.ResponseWriter, r *http.Request) {
 	}
 
 	incidents := []models.Incident{}
+	unitRegexp, rErr := regexp.Compile(`.+[0-9]+-[0-9+].*`)
 
 	for _, item := range channel.Item {
 
@@ -58,7 +59,6 @@ func GetAllIncidents(w http.ResponseWriter, r *http.Request) {
 			townshipEle := -1
 			intersectionEle := -1
 			unitsEle := -1
-			unitRegexp, rErr := regexp.Compile(`.+[0-9]+-[0-9+].*`)
 			for i := range splitStr {
 				if (strContains(splitStr[i], "&") || strContains(splitStr[i], "/")) && intersectionEle == -1 {
 					intersectionEle = i
